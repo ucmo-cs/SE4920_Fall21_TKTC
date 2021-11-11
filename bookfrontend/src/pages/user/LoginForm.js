@@ -46,7 +46,7 @@ function LoginForm({setToken}) {
     <Form.Label>Username</Form.Label>
     <Form.Control type="text" placeholder="Username" onChange = {(e)=> setUserName(e.target.value)}/>
     <Form.Text className="text-muted">
-      Username and Password are Confidintual and Private
+      Username and Password are Confidential and Private
     </Form.Text>
   </Form.Group>
 
