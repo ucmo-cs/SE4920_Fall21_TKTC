@@ -1,33 +1,35 @@
-//Move these over
-
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { propTypes } from 'react-bootstrap/esm/Image';
 function EditForm(props) {
-  const[book, setBook] = useState({
-    title:'',
-    author:'',
+  const[guidance, setGuidance] = useState({
+    PosterName:'',
+    GuidanceDesc:'',
   });
- 
+
   const changeValue=(e)=>{
-    setBook({
-     ...book, [e.target.name]:e.target.value  
+    setGuidance({
+     ...guidance, [e.target.name]:e.target.value  
     });
+    console.log("name "+ e.target.name );
+    console.log("value "+ e.target.value );
+
   }
- 
-  const submitBook =(e)=>{
+
+  const submitGuidance =(e)=>{
     e.preventDefault();
-    fetch("http://localhost:8080/book", {
+    fetch("http://localhost:8080/guidances", {
       method:"POST",
       headers:{
         "Content-Type" : "application/json"
       },
-      body: JSON.stringify(book)
+      body: JSON.stringify(guidance)
     })
     .then(res=>{
         console.log(1,res);
         if(res.status === 201){
           return res.json();
+
         }else{
           return null;
         }
@@ -37,26 +39,26 @@ function EditForm(props) {
       if(res!==null){
         props.history.push('/');
       }else{
-        alert('fails');
+        alert('Too many characters!\nPlease shorten your description and/or title.\nYou may only use 255 characters for each');
       }
     
     });
- 
+
   }
- 
+
   return (
     <div>
-<Form onSubmit = {submitBook}>
+<Form onSubmit = {submitGuidance}>
   <Form.Group controlId="formBasicEmail">
-    <Form.Label>Name Of Employee</Form.Label>
-    <Form.Control type="text" placeholder="Enter Name" onChange = {changeValue} name="title" />
+    <Form.Label>title</Form.Label>
+    <Form.Control type="text" placeholder="Enter Name" onChange = {changeValue} name="posterName" />
   </Form.Group>
- 
+
   <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-    <Form.Label>Covid Guidance (1000 Character Limit)</Form.Label>
-    <Form.Control as="textarea" rows={4} />
+    <Form.Label>Covid Guidance (255 Character Limit)</Form.Label>
+    <Form.Control as="textarea" placeholder="Enter desc" onChange = {changeValue} name="guidanceDesc" rows={4} />
   </Form.Group>
- 
+
   <Button variant="primary" type="submit">
     Submit  
   </Button>
@@ -64,5 +66,5 @@ function EditForm(props) {
     </div>
   );
 }
- 
+
 export default EditForm;

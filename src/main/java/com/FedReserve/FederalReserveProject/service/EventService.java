@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public interface EventService {
     public Events add(Events event);
-    public Events getEvent(String id);
+    public List<Events> getEvent();
     //public void deleteEvent(int id);
     public void deleteEvent(Events event);
 }

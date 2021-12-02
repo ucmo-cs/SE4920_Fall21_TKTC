@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -43,12 +45,17 @@ public class EventController {
         return "New event added";
     }
 
-    @GetMapping("/event")
-    public Events getEvent(@RequestBody RequestEvent requestEvent) {
+    //@GetMapping("/event/{id}")
+    /*public Events getEvent(@RequestBody RequestEvent requestEvent) {
         return eventService.getEvent("1");
+    }*/
+    @GetMapping("/event")
+    public ResponseEntity<?> getEvent() {
+        //return new ResponseEntity<>(eventService.getEvent(id), HttpStatus.OK);
+        return new ResponseEntity<>(eventService.getEvent(), HttpStatus.OK);
     }
 
-    @GetMapping("/event/{id}")
+    @PostMapping("/event/delete/{id}")
     public void deleteEvent(@PathVariable int id, @RequestBody RequestEvent requestEvent) {
         System.out.println("deleteEvent in EventController");
         ModelMapper mapper = new ModelMapper();

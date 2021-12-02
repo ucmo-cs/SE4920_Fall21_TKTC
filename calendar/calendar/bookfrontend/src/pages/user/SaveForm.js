@@ -38,7 +38,7 @@ function SaveForm(props) {
       if(res!==null){
         props.history.push('/');
       }else{
-        alert('fails');
+        alert('An error occurred');
       }
     
     });
@@ -61,6 +61,10 @@ function SaveForm(props) {
   <Button variant="primary" type="submit">
     Submit  
   </Button>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+
 </Form>
     </div>
   );

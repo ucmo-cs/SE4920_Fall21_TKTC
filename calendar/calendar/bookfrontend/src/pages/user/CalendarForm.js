@@ -15,12 +15,14 @@ class CalendarForm extends Component {
   let input = prompt('Do you want to Add/Edit the event? (Y/N)')
         if (input === 'Y') {
             let title = prompt('Please enter a new title for your event')
+            let eventDescription = prompt('Please enter a description of your event')
+            let eventLocation = prompt('Please enter the location of your event')
             let calendarApi = selectInfo.view.calendar
  
             calendarApi.unselect()
 
             if (title) {
-                const eventNew = {id: "0", name: title, date: selectInfo.startStr, description: "desc", location: "location", emails: "emails", team_id: "1"}
+                const eventNew = {id: "0", name: title, date: selectInfo.startStr, description: eventDescription, location: eventLocation, emails: "emails", team_id: "1"}
                                 this.setState({ ...this.state, eventList: [...this.state.eventList, eventNew] }, () => {
                                     console.log("hi");
                                 });
@@ -52,31 +54,52 @@ class CalendarForm extends Component {
         })
     }
     renderEventContent = (eventInfo) => {
-        const newEvent = { title: '', start: '' }
- 
+        //const newEvent = { title: '', start: '' }
+        const newEvent = {eventList: [{id: ''}]}
+
         const onEventDelete = () => {
-            axios.delete("http://localhost:8080/event/" + eventInfo.event.id, newEvent).then((res) => {
+            const newEvent = {id: "0"}
+                                            this.setState({ ...this.state, eventList: [...this.state.eventList, newEvent] }, () => {
+                                                console.log("hi");
+                                            });
+            const json = JSON.stringify({id: parseInt(eventInfo.event.id, 10) });
+            console.log("json:");
+            console.log(json);
+            console.log("http://localhost:8080/event/delete/" + eventInfo.event.id);
+            axios.post("http://localhost:8080/event/delete/" + eventInfo.event.id,json,
+            {
+              headers: {
+                // Overwrite Axios's automatically set Content-Type
+                'Content-Type': 'application/json'
+              }
+            }
+            ).then((res) => {
                 window.location.reload();
             })
         }
- 
+
         const onEditEvent = () => {
- 
-            let title = prompt('Please enter a new title for your event')
-            newEvent.title = title
- 
-            console.log(newEvent)
-            if (title) {
-                let newDate = prompt('Please enter a date (YYYY-MM-DD)')
-                newEvent.start = newDate
-                axios.put("http://localhost:8080/event/" + eventInfo.event.id, newEvent)
-                    .then((res) => {
-                        window.location.reload();
- 
-                        // eventInfo.history.push("http://localhost:3000/")
- 
-                    })
- 
+            const newEvent = {id: "0"}
+                this.setState({ ...this.state, eventList: [...this.state.eventList, newEvent] }, () => {
+                    console.log("hello");
+            });
+            console.log("eventInfo")
+            console.log(eventInfo.event._def.extendedProps.name)
+            console.log("this.state.eventList:")
+            console.log(this.state.eventList)
+            console.log("this.state:")
+            if(eventInfo.event.allDay)
+            {
+                console.log("ALL DAY BABY")
+                alert(eventInfo.event._def.extendedProps.name + "\n" + eventInfo.event._def.extendedProps.description + "\n" + eventInfo.event._def.extendedProps.location + "\nTHIS IS AN ALL DAY EVENT")
+            }
+            else
+            {
+                var temp_date = eventInfo.event.start;
+                var string_date = temp_date.getHours() + ":" + temp_date.getMinutes()
+                if (temp_date.getMinutes().toString() == 0)
+                    string_date += "0"
+                alert(eventInfo.event._def.extendedProps.name + "\n" + eventInfo.event._def.extendedProps.description + "\n" + eventInfo.event._def.extendedProps.location + "\n" + string_date)
             }
         }
         return (
@@ -88,7 +111,7 @@ class CalendarForm extends Component {
                     <b style={{ textTransform: 'uppercase' }}>{eventInfo.event._def.title}</b>
                 </div >
                 <div>
-                    <button onClick={() => onEditEvent()}>Edit</button>
+                    <button onClick={() => onEditEvent()}>View</button>
                 </div>
                 <div>
                     <button onClick={() => onEventDelete()}>Delete</button>

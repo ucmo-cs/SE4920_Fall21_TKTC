@@ -4,26 +4,26 @@ function Detail(props) {
 
 const id= props.match.params.id;
 
-const [book, setBook] = useState({
-  id:"",
-  title:"",
-  author:""
+const [guidance, setGuidance] = useState({
+  guid:"",
+  posterName:"",
+  guidanceDesc:""
 });
 
 
 useEffect(()=>{ 
-  fetch("http://localhost:8080/book/" + id, {method:"GET"})
+  fetch("http://localhost:8080/guidances/" + id, {method:"GET"})
   .then(res =>res.json())
   .then(res=>{
-    setBook(res)});
+    setGuidance(res)});
 },[])
 
   return (
     <div>
-        <h1> Book Info. </h1>
+        <h1> MESSAGE FROM MANAGEMENT: </h1>
         <hr/>
-        <h3>{book.author}</h3>
-        <h1>{book.title}</h1>
+        <h3>{guidance.guidanceDesc}</h3>
+        <h1>{guidance.posterName}</h1>
     </div>
   );
 }

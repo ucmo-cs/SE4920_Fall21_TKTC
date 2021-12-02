@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class EventServiceImplementation implements EventService{
@@ -24,9 +25,7 @@ public class EventServiceImplementation implements EventService{
         //id	date	description	emails	location	name	team_id
     }
 
-    public Events getEvent(String id){
-        return eventRepository.getById(id);
-    }
+    public List<Events> getEvent(){ return eventRepository.findAll(); }
 
     public void deleteEvent(Events event) {
         eventRepository.delete(event);
